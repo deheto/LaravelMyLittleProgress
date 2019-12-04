@@ -1,22 +1,19 @@
 <?php
-
 namespace App\Http\Controllers;
-
+use App\Perfil;
 use Illuminate\Http\Request;
 
-class Profile_controller extends Controller
+class Perfil_controller extends Controller
 {
-   
     public function createprofile(Request $request)
     {
-
-        $profile = new Profile($request->all());
-            $validate = Validator::make($request->all(),[
+        $profile = new Perfil($request->all());
+            $validate = \Validator::make($request->all(),[
                 'codigo_usuario_perfil' => 'required|unique:PERFIL',
                 'nombre' => 'required|alpha',
                 'apellido1' => 'required|alpha',
                 'apellido2' => 'required|alpha',
-                'edad' => 'required|alpha',
+                'edad' => 'required',
                 'sexo' => 'required|alpha',
                 'descripcion' => 'alpha',
             ]);
@@ -30,10 +27,10 @@ class Profile_controller extends Controller
                 );
 
             } else {
-                DB::insert(
-                    "INSERT INTO PERFIL (codigo_usuario_perfil ,nombre, apellido1, apellido2, sexo, descripcion) VALUES (?,?,?,?,?,?)",
+                \DB::insert(
+                    "INSERT INTO PERFIL (codigo_usuario_perfil, nombre, apellido1, apellido2, sexo, edad,descripcion) VALUES (?,?,?,?,?,?,?)",
                     [$profile->codigo_usuario_perfil, $profile->nombre,
-                    $profile->apellido1,$profile->apellido2,$profile->sexo,$profile->descripcion]
+                    $profile->apellido1,$profile->apellido2,$profile->sexo, $profile->edad,$profile->descripcion]
                 );
                 $data = array(
                     'status' => 'correct',
@@ -45,10 +42,4 @@ class Profile_controller extends Controller
 
         return response()->json($data, $data['code']);
     }
-
-
-
-
-
-
 }
