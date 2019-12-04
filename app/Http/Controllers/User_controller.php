@@ -6,6 +6,8 @@ use App\Usuario;
 use Illuminate\Http\Request;
 use mysqli;
 use PharIo\Manifest\Email;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class User_controller extends Controller
 {
@@ -18,7 +20,7 @@ class User_controller extends Controller
 
         $user->tipo = 'Cliente';
 
-            $validate = \Validator::make($request->all(),[
+            $validate = Validator::make($request->all(),[
 
                 'correo' => 'required|email|unique:USUARIO',
                 'contrasena' => 'required|alpha'
@@ -39,7 +41,7 @@ class User_controller extends Controller
 
 
                 $pwd = hash('sha256', $user->contrasena);
-                \DB::insert(
+                DB::insert(
                     "INSERT INTO USUARIO (correo, contrasena, tipo) VALUES (?,?,?)",
                     [$user->correo, $pwd, $user->tipo]
                 );
@@ -62,7 +64,7 @@ class User_controller extends Controller
 
 
 
-        $validate = \Validator::make($request->all(), [
+        $validate = Validator::make($request->all(), [
 
             'correo' => 'required|email',
             'contrasena' => 'required|alpha'
@@ -82,7 +84,7 @@ class User_controller extends Controller
 
                 $pwd = hash('sha256', $user->contrasena);
 
-                $results = \DB::select("SELECT * FROM USUARIO WHERE correo = '$user->correo' AND
+                $results = DB::select("SELECT * FROM USUARIO WHERE correo = '$user->correo' AND
                 contrasena = '$pwd'");
 
 
