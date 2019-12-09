@@ -12,11 +12,14 @@ class User_controller extends Controller
     public function register(Request $request)
     {
         $user = new Usuario($request->all());
+        
         $user->tipo = 'Cliente';
+
             $validate = Validator::make($request->all(),[
                 'correo' => 'required|email|unique:USUARIO',
-                'contrasena' => 'required|alpha'
+                'contrasena' => 'required'
             ]);
+
             if ($validate->fails() || !is_object($user)) {
                 $data = array(
                     'status' => 'error',
@@ -24,6 +27,7 @@ class User_controller extends Controller
                     'message' => 'El correo ya está registrado',
                     'error' => $validate->errors()
                 );
+                
             } else {
                 $pwd = hash('sha256', $user->contrasena);
                 DB::insert(
@@ -31,7 +35,7 @@ class User_controller extends Controller
                     [$user->correo, $pwd, $user->tipo]
                 );
 
-                $results = DB::select("SELECT * FROM USUARIO WHERE correo = '$user->correo' AND
+                $results = \DB::select("SELECT codigo, correo, tipo FROM USUARIO WHERE correo = '$user->correo' AND
                 contrasena = '$pwd'");
 
 
@@ -48,13 +52,13 @@ class User_controller extends Controller
     public function login(Request $request)
     {
         $user = new Usuario($request->all());
-
+      
         $validate = Validator::make($request->all(), [
 
             'correo' => 'required|email',
-            'contrasena' => 'required|alpha'
+            'contrasena' => 'required'
         ]);
-        
+
        if ($validate->fails() || !is_object($user) ) {
                 $data = array(
                     'status' => 'error',
@@ -66,11 +70,17 @@ class User_controller extends Controller
 
                 $pwd = hash('sha256', $user->contrasena);
 
-                $results = DB::select("SELECT * FROM USUARIO WHERE correo = '$user->correo' AND
-                contrasena = '$pwd'");
+               
 
-               if (count($results) > 0) {
-                    $data = array(
+                $results = \DB::select("SELECT * FROM USUARIO WHERE correo = 
+                '$user->correo' AND contrasena ='$pwd'");
+        
+              
+                var_dump($results);
+        
+                     if (count($results) > 0 ) {
+             
+                        $data = array(
                         'status' => 'login_success',
                         'code' => 200,
                         'message' => 'El usuario se ha logeado correctamente',

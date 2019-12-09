@@ -6,8 +6,6 @@ class Usuario extends Model
 {
     public $timestamps = false;
     protected $table = 'USUARIO';
-    protected $fillable = ['correo','tipo'];
-    protected $hidden = [
-        'contrasena'
-    ];
+    protected $fillable = ['correo','tipo','contrasena'];
+   
 }
