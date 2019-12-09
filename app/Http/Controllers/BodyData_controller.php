@@ -1,8 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Datos_Corporales
-
+use App\Datos_Corporales;
 class BodyData_controller extends Controller
 {
     public function modifyBodyData(Request $request)
@@ -28,13 +27,13 @@ class BodyData_controller extends Controller
             } else {
                 \DB::insert(
                     "INSERT INTO DATOS_CORPORALES (peso, altura, indice_grasa, indice_MasaMuscular, codigo_cliente, fecha) VALUES (?,?,?,?,?,?)",
-                    [$bodyData->peso, $profile->altura,
-                    $profile->indice_grasa,$profile->indice_MasaMuscular, $profile->codigo_cliente, $profile->fecha]
+                    [$bodyData->peso, $bodyData->altura,
+                    $bodyData->indice_grasa,$bodyData->indice_MasaMuscular, $bodyData->codigo_cliente, $bodyData->fecha]
                 );
                 $data = array(
                     'status' => 'correct',
                     'code' => 200,
-                    'message' => 'Los datos corporales se han modiicado correctamente'
+                    'message' => 'Los datos corporales se han modificado correctamente'
                 );
 
             }

@@ -30,10 +30,16 @@ class User_controller extends Controller
                     "INSERT INTO USUARIO (correo, contrasena, tipo) VALUES (?,?,?)",
                     [$user->correo, $pwd, $user->tipo]
                 );
+
+                $results = DB::select("SELECT * FROM USUARIO WHERE correo = '$user->correo' AND
+                contrasena = '$pwd'");
+
+
                 $data = array(
                     'status' => 'register_success',
                     'code' => 200,
-                    'message' => 'El usuario se ha creado correctamente'
+                    'message' => 'El usuario se ha creado correctamente',
+                    'body' => $results,
                 );
             }
         return response()->json($data, $data['code']);
@@ -42,11 +48,13 @@ class User_controller extends Controller
     public function login(Request $request)
     {
         $user = new Usuario($request->all());
+
         $validate = Validator::make($request->all(), [
 
             'correo' => 'required|email',
             'contrasena' => 'required|alpha'
         ]);
+        
        if ($validate->fails() || !is_object($user) ) {
                 $data = array(
                     'status' => 'error',
@@ -55,15 +63,20 @@ class User_controller extends Controller
                     'error' => $validate->errors()
                 );
             } else {
+
                 $pwd = hash('sha256', $user->contrasena);
+
                 $results = DB::select("SELECT * FROM USUARIO WHERE correo = '$user->correo' AND
                 contrasena = '$pwd'");
+
                if (count($results) > 0) {
                     $data = array(
                         'status' => 'login_success',
                         'code' => 200,
-                        'message' => 'El usuario se ha logeado correctamente'
+                        'message' => 'El usuario se ha logeado correctamente',
+                        'body' =>  $results
                     );
+
                 } else {
                     $data = array(
                         'status' => 'error',
@@ -72,6 +85,7 @@ class User_controller extends Controller
                     );
                  }
                 }
+
         return response()->json($data, $data['code']);
     }
 }
