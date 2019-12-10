@@ -7,7 +7,8 @@ class BodyData_controller extends Controller
     public function modifyBodyData(Request $request)
     {
         $bodyData = new Datos_Corporales($request->all());
-            $validate = \Validator::make($request->all(),[
+        
+        $validate = \Validator::make($request->all(),[
                 'peso' => 'required|numeric',
                 'altura' => 'required|numeric',
                 'indice_grasa' => 'required|numeric',
@@ -20,7 +21,7 @@ class BodyData_controller extends Controller
                 $data = array(
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'Error al modificar datos',
+                    'message' => 'INCORRECT_DATA',
                     'error' => $validate->errors()
                 );
 
@@ -31,7 +32,7 @@ class BodyData_controller extends Controller
                     $bodyData->indice_grasa,$bodyData->indice_MasaMuscular, $bodyData->codigo_cliente, $bodyData->fecha]
                 );
                 $data = array(
-                    'status' => 'correct',
+                    'status' => 'SUCCESS',
                     'code' => 200,
                     'message' => 'Los datos corporales se han modificado correctamente'
                 );

@@ -28,7 +28,7 @@ class Perfil_controller extends Controller
                 $data = array(
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'Error al registrar el perfil',
+                    'message' => 'PROFILE_ALREADY_EXISTS',
                     'error' => $validate->errors()
                 );
 
@@ -39,7 +39,7 @@ class Perfil_controller extends Controller
                 $data = array(
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'El usuario no existe',
+                    'message' => 'USER_DOES_NOT_EXISTS',
                     'error' => $validate->errors()
                 );
 
@@ -52,10 +52,15 @@ class Perfil_controller extends Controller
                     [$profile->codigo_usuario_perfil, $profile->nombre,
                     $profile->apellido1,$profile->apellido2,$profile->sexo, $profile->edad,$profile->descripcion]
                 );
+
+                $user = \DB::table('PERFIL')->where('codigo_usuario_perfil',$profile->codigo_usuario_perfil)->first();
+  
+
                 $data = array(
                     'status' => 'correct',
                     'code' => 200,
-                    'message' => 'El perfil se ha creado correctamente'
+                    'message' => 'SUCCESS',
+                    'body' =>  $user
                 );
 
             }
