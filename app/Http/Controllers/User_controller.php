@@ -30,12 +30,13 @@ class User_controller extends Controller
                 $pwd = hash('sha256', $user->contrasena);
                
                 \DB::insert(
-                    "INSERT INTO USUARIO (correo, contrasena, tipo) VALUES (?,?,?)",
-                    [$user->correo, $pwd, $user->tipo]
+                    "INSERT INTO USUARIO (correo, contrasena, tipo, perfil_registrado,datos_corporales_registrado ) VALUES (?,?,?,?,?)",
+                    [$user->correo, $pwd, $user->tipo,'0','0']
                 );
 
 
-                $results = \DB::select("SELECT codigo, correo, tipo FROM USUARIO WHERE correo = '$user->correo' AND
+                $results = \DB::select("SELECT codigo, correo, tipo, perfil_registrado,
+                datos_corporales_registrado FROM USUARIO WHERE correo = '$user->correo' AND
                 contrasena = '$pwd'");
 
                 $id = $results[0]->codigo;
@@ -70,14 +71,15 @@ class User_controller extends Controller
                 $data = array(
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'INVALID_DATA',
+                    'message' => 'DOES',
                     'error' => $validate->errors()
                 );
             } else {
 
                 $pwd = hash('sha256', $user->contrasena);
 
-                $results = \DB::select("SELECT codigo, correo, tipo FROM USUARIO WHERE correo = 
+                $results = \DB::select("SELECT codigo, correo, tipo, perfil_registrado,
+                datos_corporales_registrado FROM USUARIO WHERE correo = 
                 '$user->correo' AND contrasena ='$pwd'");
         
           
@@ -95,6 +97,7 @@ class User_controller extends Controller
                     $data = array(
                         'status' => 'error',
                         'code' => 404,
+                        'error' => 'error',
                         'message' => 'DOES_NOT_MATCH'
                     );
                  }

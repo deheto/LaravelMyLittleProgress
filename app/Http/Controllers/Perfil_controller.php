@@ -12,7 +12,7 @@ class Perfil_controller extends Controller
         $profile = new Perfil($request->all());
            
         $validate = \Validator::make($request->all(),[
-                'codigo_usuario_perfil' => 'required|unique:PERFIL',
+                'codigo_usuario_perfil' => 'required|numeric|unique:PERFIL',
                 'nombre' => 'required|alpha',
                 'apellido1' => 'required|alpha',
                 'apellido2' => 'required|alpha',
@@ -20,15 +20,15 @@ class Perfil_controller extends Controller
                 'sexo' => 'required|alpha'
             ]);
 
+          
             $user = \DB::table('USUARIO')->where('codigo',$profile->codigo_usuario_perfil)->first();
   
-            
             if ($validate->fails() || !is_object($profile)) {
 
                 $data = array(
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'PROFILE_ALREADY_EXISTS',
+                    'message' => 'DATA_ERROR',
                     'error' => $validate->errors()
                 );
 
@@ -53,14 +53,17 @@ class Perfil_controller extends Controller
                     $profile->apellido1,$profile->apellido2,$profile->sexo, $profile->edad,$profile->descripcion]
                 );
 
-                $user = \DB::table('PERFIL')->where('codigo_usuario_perfil',$profile->codigo_usuario_perfil)->first();
+                \DB::update("UPDATE USUARIO SET perfil_registrado = '1' WHERE USUARIO.codigo = '$profile->codigo_usuario_perfil'"
+                 );
+
+                $userProfile = \DB::table('PERFIL')->where('codigo_usuario_perfil',$profile->codigo_usuario_perfil)->first();
   
 
                 $data = array(
                     'status' => 'correct',
                     'code' => 200,
                     'message' => 'SUCCESS',
-                    'body' =>  $user
+                    'body' =>  $userProfile
                 );
 
             }
