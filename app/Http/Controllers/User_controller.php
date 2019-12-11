@@ -45,15 +45,15 @@ class User_controller extends Controller
                     "INSERT INTO CLIENTE (codigo_cliente, objetivo) VALUES ($id,NULL)"
                 );
 
-
                 $data = array(
                     'status' => 'register_success',
                     'code' => 200,
                     'message' => 'ACCOUNT_CORRECT',
                     'body' => $results,
+     
                 );
-
             }
+
         return response()->json($data, $data['code']);
     }
 
@@ -83,8 +83,8 @@ class User_controller extends Controller
                 '$user->correo' AND contrasena ='$pwd'");
         
           
-    
-                     if (count($results) > 0 ) {
+        // $sql = "SELECT * FROM EJERCICIOS ej INNER JOIN  RUTINA_CLIENTES rc  ON ej.id_rutina = rc.id INNER JOIN ACTIVIDAD ac ON ej.id_actividad = ac.identificacion";
+        if (count($results) > 0 ) {
              
                         $data = array(
                         'status' => 'login_success',

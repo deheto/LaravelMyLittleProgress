@@ -26,7 +26,12 @@ Route::middleware('auth:api')->get('/profile', function (Request $request) {
 
 Route::post('/user/register','User_controller@register');
 Route::post('/user/login','User_controller@login');
+
 Route::post('/profile/createProfile','Perfil_controller@createprofile');
+Route::post('/profile/getProfile','Perfil_controller@getProfile');
+
+Route::post('/bodyData/addBodyData','BodyData_controller@addBodyData');
 Route::post('/bodyData/addBodyData','BodyData_controller@addBodyData');
 
+Route::post('/routine/getRoutine','Routine_controller@getRoutine');
 

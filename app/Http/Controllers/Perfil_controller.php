@@ -56,7 +56,7 @@ class Perfil_controller extends Controller
                 \DB::update("UPDATE USUARIO SET perfil_registrado = '1' WHERE USUARIO.codigo = '$profile->codigo_usuario_perfil'"
                  );
 
-                $userProfile = \DB::table('PERFIL')->where('codigo_usuario_perfil',$profile->codigo_usuario_perfil)->first();
+                 $userProfile = \DB::table('PERFIL')->where('codigo_usuario_perfil',$profile->codigo_usuario_perfil)->first();
   
 
                 $data = array(
@@ -69,5 +69,43 @@ class Perfil_controller extends Controller
             }
 
         return response()->json($data, $data['code']);
+    }
+
+
+    public function getProfile(Request $request)
+    {   
+
+        $id =  $request->codigo_usuario_perfil;
+
+        $validate = \Validator::make($request->all(),[
+            'codigo_usuario_perfil' => 'required|numeric|unique:PERFIL',
+        ]);
+
+
+        if ($validate->fails()) {
+    
+         
+            $userProfile = \DB::select("SELECT * FROM PERFIL WHERE codigo_usuario_perfil = '$id'");
+
+          
+        $data = array(
+            'status' => 'correct',
+            'code' => 200,
+            'message' => 'SUCCESS',
+            'body' =>  $userProfile[0]
+        );
+
+        } else {
+
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'USER_DOES_NOT_EXISTS',
+                'error' => 'USER_NOT_FOUND'
+            );
+        }
+
+        return response()->json($data, $data['code']);
+
     }
 }
