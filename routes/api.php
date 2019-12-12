@@ -31,7 +31,10 @@ Route::post('/profile/createProfile','Perfil_controller@createprofile');
 Route::post('/profile/getProfile','Perfil_controller@getProfile');
 
 Route::post('/bodyData/addBodyData','BodyData_controller@addBodyData');
-Route::post('/bodyData/addBodyData','BodyData_controller@addBodyData');
+// Route::post('/bodyData/addBodyData','BodyData_controller@addBodyData');
 
 Route::post('/routine/getRoutine','Routine_controller@getRoutine');
+Route::post('/routine/deleteExercise','Routine_controller@deleteExercise');
+Route::post('/routine/addRoutine','Routine_controller@addRoutine');
+
 

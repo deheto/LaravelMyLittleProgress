@@ -39,7 +39,7 @@ class Perfil_controller extends Controller
                 $data = array(
                     'status' => 'error',
                     'code' => 404,
-                    'message' => 'USER_DOES_NOT_EXISTS',
+                    'message' => 'PROFILE_USER_DOES_NOT_EXISTS',
                     'error' => $validate->errors()
                 );
 
