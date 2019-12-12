@@ -6,6 +6,78 @@ use Illuminate\Http\Request;
 
 class Routine_controller extends Controller
 {
+    // 
+    
+
+
+    public function addExercise(Request $request)
+    {   
+
+        $validateData = \Validator::make($request->all(),[
+            'series_totales' => 'required|numeric',
+            'rep_totales' => 'required|numeric',
+            'nombre' => 'required|alpha',
+            'parte_cuerpo' => 'required|alpha',
+            'id' => 'required|numeric'
+        ]);
+
+        if ($validateData->fails()) {
+
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'DATA_INCORRECT',
+                'error' => 'DATA_INCORRECT'
+            );
+
+
+        }else {
+
+         $validateExists = \Validator::make($request->all(),[
+             'id' => 'unique:RUTINA_CLIENTES',
+         ]);
+
+        if ($validateExists->fails()) {
+
+
+        \DB::insert("INSERT INTO ACTIVIDAD (identificacion, nombre, parte_cuerpo) 
+        VALUES (?, ?, ?)",[NULL,$request->nombre, $request->parte_cuerpo ]);
+ 
+        $activitie = \DB::select("SELECT identificacion FROM ACTIVIDAD WHERE nombre = '$request->nombre'
+        AND parte_cuerpo = '$request->parte_cuerpo'");
+    
+        $id_activitie = $activitie[0];
+       
+
+        
+        \DB::insert("INSERT INTO EJERCICIOS (id_ejercicio, rep_totales,
+         series_totales, id_actividad, id_rutina) VALUES (NULL, ?, ?, ?,?)",
+         [$request->rep_totales,$request->series_totales, $id_activitie->identificacion,
+         $request->id]);
+ 
+
+        $data = array(
+            'status' => 'correct',
+            'code' => 200,
+            'message' => 'SUCCESS'      
+        );
+
+        } else {
+
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'DOEST_NOT_HAVE_ROUTINES',
+                'error' => 'DOEST_NOT_HAVE_ROUTINES'
+            );
+        }
+    }
+
+        return response()->json($data, $data['code']);
+
+    }
+
+
     public function getExercise(Request $request)
     {   
 

@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:api')->get('/profile', function (Request $request) {
     return $request->profile();
+
 });
 
 */
@@ -37,5 +38,6 @@ Route::post('/routine/getRoutine','Routine_controller@getRoutine');
 Route::post('/routine/getExercise','Routine_controller@getExercise');
 Route::post('/routine/deleteExercise','Routine_controller@deleteExercise');
 Route::post('/routine/addRoutine','Routine_controller@addRoutine');
+Route::post('/routine/addExercise','Routine_controller@addExercise');
 
 
